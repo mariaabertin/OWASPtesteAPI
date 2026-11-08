@@ -1,0 +1,13 @@
+{
+  "name": "carteira-api-owasp",
+  "version": "1.0.0",
+  "description": "API de Carteira Digital VULNERAVEL de proposito - demo OWASP API Top 10 (2023)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2"
+  }
+}
