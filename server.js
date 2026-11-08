@@ -1,11 +1,5 @@
 // ============================================================
 // API de Carteira Digital - VULNERAVEL DE PROPOSITO
-// Demo academica: OWASP API Security Top 10 (2023)
-//
-// ATENCAO: use apenas para estudo, localmente. Nunca em producao!
-// (Senhas em texto puro e segredo JWT fixo tambem sao simplificacoes
-//  de demonstracao.)
-//
 // Como alternar entre os modos:
 //   sem parametro       -> comportamento VULNERAVEL
 //   ?secure=true        -> comportamento CORRIGIDO
@@ -17,15 +11,29 @@ const jwt = require('jsonwebtoken');
 const app = express();
 app.use(express.json());
 
+app.get('/', (req, res) => {
+  res.json({
+    mensagem: 'API de Carteira Digital (testes de vulnerabilidade)',
+    rotas: [
+      'POST   /login',
+      'GET    /accounts/:id',
+      'POST   /users',
+      'DELETE /admin/users/:id',
+      'GET    /debug/users',
+    ],
+    dica: 'Adicione ?secure=true para ativar a versao corrigida',
+  });
+});
+
 const SECRET = 'segredo-de-demonstracao';
 const isSecure = (req) => req.query.secure === 'true';
 
-// ---------- "Banco de dados" em memoria ----------
+// Banco de dados em memoria
 let nextId = 4;
 
 const users = [
-  { id: 1, name: 'Alice', email: 'alice@teste.com', password: '123', role: 'user' },
-  { id: 2, name: 'Bob',   email: 'bob@teste.com',   password: '123', role: 'user' },
+  { id: 1, name: 'Maria', email: 'maria@teste.com', password: '123', role: 'user' },
+  { id: 2, name: 'Thaynara',   email: 'thaynara@teste.com',   password: '123', role: 'user' },
   { id: 3, name: 'Admin', email: 'admin@teste.com', password: 'admin', role: 'admin' },
 ];
 
@@ -36,7 +44,7 @@ const accounts = [
   { id: 3, ownerId: 3, balance: 99999 },
 ];
 
-// ---------- Autenticacao (JWT) ----------
+// Autenticacao (JWT) 
 // Middleware: so confere se o token e valido (AUTENTICACAO).
 // Ele NAO decide o que o usuario pode fazer (AUTORIZACAO).
 function auth(req, res, next) {
@@ -60,10 +68,9 @@ app.post('/login', (req, res) => {
   res.json({ token });
 });
 
-// ============================================================
-// API1:2023 - BOLA (Broken Object Level Authorization)
+
+// BOLA (Broken Object Level Authorization)
 // GET /accounts/:id
-// ============================================================
 app.get('/accounts/:id', auth, (req, res) => {
   const account = accounts.find((a) => a.id === Number(req.params.id));
   if (!account) return res.status(404).json({ erro: 'Conta nao encontrada' });
@@ -79,10 +86,9 @@ app.get('/accounts/:id', auth, (req, res) => {
   res.json(account);
 });
 
-// ============================================================
-// API3:2023 - BOPLA / Mass Assignment
+
+// BOPLA / Mass Assignment
 // POST /users
-// ============================================================
 app.post('/users', (req, res) => {
   let newUser;
 
@@ -103,10 +109,9 @@ app.post('/users', (req, res) => {
   res.status(201).json(semSenha);
 });
 
-// ============================================================
+
 // API5:2023 - BFLA (Broken Function Level Authorization)
 // DELETE /admin/users/:id
-// ============================================================
 app.delete('/admin/users/:id', auth, (req, res) => {
   if (isSecure(req)) {
     // CORRECAO (RBAC): so quem tem role "admin" executa esta funcao
