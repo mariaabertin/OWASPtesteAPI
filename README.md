@@ -1,4 +1,4 @@
-# 💳 API de Carteira Digital: OWASP API Security Top 10
+# 💳 API de Carteira Digital: OWASP API Security Top 10 (2023)
 
 Projeto didático para o seminário **"OWASP Top 10 aplicado a APIs"**.
 
@@ -92,7 +92,7 @@ Content-Type: application/json
 ```
 
 Copie o token. Ele será usado nas demonstrações 1 e 3.
-Para testar como outro usuário, faça login com outro e-mail (Bob, Admin).
+Para testar como outro usuário, faça login com outro e-mail (Thaynara, Admin).
 
 ---
 
@@ -104,7 +104,7 @@ Para testar como outro usuário, faça login com outro e-mail (Bob, Admin).
 
 **Headers:**
 ```
-Authorization: Bearer TOKEN_DA_ALICE
+Authorization: Bearer TOKEN_DA_MARIA
 ```
 
 ### Ataque
@@ -181,11 +181,11 @@ newUser = { id: nextId++, name, email, password, role: 'user' };
 
 **Headers:**
 ```
-Authorization: Bearer TOKEN_DA_ALICE
+Authorization: Bearer TOKEN_DA_MARIA
 ```
 
 ### Ataque
-A Maria, que é usuária comum, tenta deletar o Thaynara (id 2).
+A Maria, que é usuária comum, tenta deletar a Thaynara (id 2).
 
 | Modo           | URL                                  | Resultado                                |
 |----------------|--------------------------------------|------------------------------------------|
@@ -214,24 +214,10 @@ Uma falha pequena de validação vira controle total do sistema.
 
 ---
 
-## 📚 Vulnerabilidades exemplificadas
+## Resumo
 
 | Vulnerabilidade | O que falha?        | Pergunta que a API esqueceu de fazer          |
 |-----------------|---------------------|-----------------------------------------------|
 | **BOLA**        | Acesso ao *objeto*  | "Este objeto pertence a **você**?"            |
 | **BOPLA**       | Acesso à *propriedade* | "Você pode definir **este campo**?"        |
 | **BFLA**        | Acesso à *função*   | "Você tem permissão para **esta ação**?"      |
-
-**Ideia central:** *autenticação* (quem é você?) é diferente de *autorização* (o que você pode fazer?). Nas três falhas, a API só fez a primeira.
-
----
-
-## 🧯 Simplificações (só para a demo)
-
-- Senhas em **texto puro**.
-- Segredo do JWT **fixo no código**.
-- Dados em memória, sem banco de dados.
-
-## 🔎 Referência
-
-[OWASP API Security Top 10 (2023)](https://owasp.org/API-Security/editions/2023/en/0x11-t10/)
